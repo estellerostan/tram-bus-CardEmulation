@@ -17,13 +17,17 @@
 package com.example.android.cardemulation;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
+import android.widget.TextView;
+
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 /**
  * Generic UI for sample discovery.
@@ -32,20 +36,29 @@ public class CardEmulationFragment extends Fragment {
 
     public static final String TAG = "CardEmulationFragment";
 
+    private FirebaseAuth mAuth;
+    private FirebaseUser currentUser;
+
     /** Called when sample is created. Displays generic UI with welcome text. */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        mAuth = FirebaseAuth.getInstance();
+        currentUser = mAuth.getCurrentUser();
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.main_fragment, container, false);
-        EditText account = (EditText) v.findViewById(R.id.card_account_field);
+        TextView account = v.findViewById(R.id.card_account_field);
         account.setText(AccountStorage.GetAccount(getActivity()));
         account.addTextChangedListener(new AccountUpdater());
+
+        // TODO: set account from trambus db
+
         return v;
     }
 

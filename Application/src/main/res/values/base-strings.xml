@@ -16,17 +16,16 @@
 -->
 
 <resources>
-    <string name="app_name">CardEmulation</string>
+    <string name="app_name">Ma carte TramBus</string>
     <string name="intro_message">
         <![CDATA[
         
             
-            This sample demonstrates how to emulate an NFC card, using the "host card emulation"
-            feature added in Android 4.4. This sample makes the device appear as a loyalty card
-            whenever the screen is on and the user taps their device on an appropriately configured
-            NFC reader.
+           Cette application remplace votre carte de transport en émulant une carte NFC.
+           Cette application fait apparaître l\'appareil comme une carte de transport
+           quand l\'écran est allumé et que l\'utilisateur rappoche son appareil d'un lecteur NFC correctement configuré.\n\n
 
-            The "CardReader" sample can be used to read the loyalty card implemented in this sample.
+           L'application "tram-bus-CardReader" peut être utilisée pour lire la carte de transport implémentée dans cette application.
             
         
         ]]>
