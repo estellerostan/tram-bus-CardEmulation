@@ -35,4 +35,6 @@ limitations under the License.
 
 
     <string name="firebase_status_fmt">Firebase User: %s</string>
+
+    <string name="my_card">Accéder à ma carte</string>
 </resources>

@@ -22,6 +22,7 @@ import android.support.annotation.NonNull;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -31,11 +32,20 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 public class EmailPasswordActivity extends BaseActivity implements
         View.OnClickListener {
 
     private static final String TAG = "EmailPassword";
+    public static final String USERS_TABLE = "users";
+
+    private FirebaseUser currentUser;
+
 
     private TextView mStatusTextView;
     private TextView mDetailTextView;
@@ -97,9 +107,12 @@ public class EmailPasswordActivity extends BaseActivity implements
                             FirebaseUser user = mAuth.getCurrentUser();
                             updateUI(user);
 
-                            Intent intent = new Intent(EmailPasswordActivity.this, MainActivity.class);
-                            startActivity(intent);
-                            finish();
+                            // add new user and account number
+                            FirebaseDatabase database = FirebaseDatabase.getInstance();
+
+                            DatabaseReference myRef = database.getReference(USERS_TABLE);
+
+                            myRef.child(currentUser.getUid()).setValue(new User("June 23, 1912", "Alan Turing"));
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "createUserWithEmail:failure", task.getException());
@@ -223,6 +236,35 @@ public class EmailPasswordActivity extends BaseActivity implements
             findViewById(R.id.signed_in_buttons).setVisibility(View.VISIBLE);
 
             findViewById(R.id.verify_email_button).setEnabled(!user.isEmailVerified());
+
+            findViewById(R.id.my_card).setVisibility(View.VISIBLE);
+            Button button = findViewById(R.id.my_card);
+            button.setOnClickListener(new View.OnClickListener() {
+
+                public void onClick(View v) {
+                    //get reference
+                    FirebaseUser user = mAuth.getCurrentUser();
+                    DatabaseReference ref = FirebaseDatabase.getInstance().getReference(USERS_TABLE).child(user.getUid());
+
+                    // Attach a listener to read the data only once beacuse the account number is supposed to never change
+                    ref.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot snapshot) {
+                            TextView myCard = findViewById(R.id.my_card);
+                            myCard.setText(snapshot.getValue(Account.class).number);
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                        }
+                    });
+
+                    Intent intent = new Intent(EmailPasswordActivity.this, MainActivity.class);
+                    startActivity(intent);
+                    finish();
+                }
+            });
         } else {
             mStatusTextView.setText(R.string.signed_out);
             mDetailTextView.setText(null);
@@ -230,6 +272,8 @@ public class EmailPasswordActivity extends BaseActivity implements
             findViewById(R.id.email_password_buttons).setVisibility(View.VISIBLE);
             findViewById(R.id.email_password_fields).setVisibility(View.VISIBLE);
             findViewById(R.id.signed_in_buttons).setVisibility(View.GONE);
+
+            findViewById(R.id.my_card).setVisibility(View.GONE);
         }
     }
 

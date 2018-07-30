@@ -26,8 +26,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.google.firebase.FirebaseError;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 /**
  * Generic UI for sample discovery.
@@ -35,17 +41,14 @@ import com.google.firebase.auth.FirebaseUser;
 public class CardEmulationFragment extends Fragment {
 
     public static final String TAG = "CardEmulationFragment";
-
-    private FirebaseAuth mAuth;
-    private FirebaseUser currentUser;
+    public static final String USERS_TABLE = "users";
 
     /** Called when sample is created. Displays generic UI with welcome text. */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        mAuth = FirebaseAuth.getInstance();
-        currentUser = mAuth.getCurrentUser();
+
     }
 
     @Override
@@ -57,7 +60,10 @@ public class CardEmulationFragment extends Fragment {
         account.setText(AccountStorage.GetAccount(getActivity()));
         account.addTextChangedListener(new AccountUpdater());
 
-        // TODO: set account from trambus db
+        FirebaseAuth mAuth = FirebaseAuth.getInstance();
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+
+
 
         return v;
     }
