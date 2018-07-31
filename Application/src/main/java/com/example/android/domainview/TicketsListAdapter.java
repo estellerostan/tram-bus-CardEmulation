@@ -1,4 +1,4 @@
-package com.example.android.cardemulation;
+package com.example.android.domainview;
 
 import android.content.Context;
 import android.database.DataSetObserver;
@@ -11,6 +11,8 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.android.cardemulation.R;
+import com.example.android.domaindata.Ticket;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;

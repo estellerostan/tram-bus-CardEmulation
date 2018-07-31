@@ -1,9 +1,11 @@
-package com.example.android.cardemulation;
+package com.example.android.domainview;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+
+import com.example.android.cardemulation.R;
 
 public class TicketView extends AppCompatActivity {
 

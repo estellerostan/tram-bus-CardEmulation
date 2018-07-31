@@ -21,7 +21,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentTransaction;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -34,6 +33,8 @@ import com.example.android.common.logger.Log;
 import com.example.android.common.logger.LogFragment;
 import com.example.android.common.logger.LogWrapper;
 import com.example.android.common.logger.MessageOnlyLogFilter;
+import com.example.android.domaindata.User;
+import com.example.android.domainview.TicketsView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -78,11 +79,11 @@ public class MainActivity extends SampleActivityBase {
             @Override
             public void onDataChange(DataSnapshot snapshot) {
                 User post = snapshot.getValue(User.class);
-                post.key = snapshot.getKey();
+                post.setKey(snapshot.getKey());
 
 
                 TextView account = findViewById(R.id.card_account_field);
-                account.setText(post.key);
+                account.setText(post.getKey());
             }
 
             @Override
@@ -95,11 +96,11 @@ public class MainActivity extends SampleActivityBase {
         ref.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot snapshot) {
-                User post = snapshot.getValue(User.class);
-                post.key = snapshot.getKey();
+                User user = snapshot.getValue(User.class);
+                user.setKey( snapshot.getKey());
 
                 TextView account = findViewById(R.id.active_ticket);
-                account.setText("Ticket acheté : " + post.activeTicket);
+                account.setText("Ticket acheté : " + user.getActiveTicket());
             }
 
             @Override

@@ -38,7 +38,7 @@ import com.google.firebase.database.ValueEventListener;
 /**
  * Generic UI for sample discovery.
  */
-public class CardEmulationFragment extends Fragment implements MyCallBack {
+public class CardEmulationFragment extends Fragment {
 
     public static final String TAG = "CardEmulationFragment";
 
@@ -76,12 +76,5 @@ public class CardEmulationFragment extends Fragment implements MyCallBack {
             String account = s.toString();
             AccountStorage.SetAccount(getActivity(), account);
         }
-    }
-
-    @Override
-    public void UpdateMyText(String mystr)
-    {
-        TextView txtView = getView().findViewById(R.id.card_account_field);
-        txtView.setText(mystr);
     }
 }
