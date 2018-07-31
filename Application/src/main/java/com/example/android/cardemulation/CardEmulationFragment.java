@@ -38,17 +38,14 @@ import com.google.firebase.database.ValueEventListener;
 /**
  * Generic UI for sample discovery.
  */
-public class CardEmulationFragment extends Fragment {
+public class CardEmulationFragment extends Fragment implements MyCallBack {
 
     public static final String TAG = "CardEmulationFragment";
-    public static final String USERS_TABLE = "users";
 
     /** Called when sample is created. Displays generic UI with welcome text. */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-
     }
 
     @Override
@@ -59,12 +56,6 @@ public class CardEmulationFragment extends Fragment {
         TextView account = v.findViewById(R.id.card_account_field);
         account.setText(AccountStorage.GetAccount(getActivity()));
         account.addTextChangedListener(new AccountUpdater());
-
-        FirebaseAuth mAuth = FirebaseAuth.getInstance();
-        FirebaseUser currentUser = mAuth.getCurrentUser();
-
-
-
         return v;
     }
 
@@ -85,5 +76,12 @@ public class CardEmulationFragment extends Fragment {
             String account = s.toString();
             AccountStorage.SetAccount(getActivity(), account);
         }
+    }
+
+    @Override
+    public void UpdateMyText(String mystr)
+    {
+        TextView txtView = getView().findViewById(R.id.card_account_field);
+        txtView.setText(mystr);
     }
 }

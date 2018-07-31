@@ -17,10 +17,16 @@
 
 package com.example.android.cardemulation;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentTransaction;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
 import android.widget.ViewAnimator;
 
 import com.example.android.common.activities.SampleActivityBase;
@@ -28,6 +34,13 @@ import com.example.android.common.logger.Log;
 import com.example.android.common.logger.LogFragment;
 import com.example.android.common.logger.LogWrapper;
 import com.example.android.common.logger.MessageOnlyLogFilter;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 /**
  * A simple launcher activity containing a summary sample description, sample log and a custom
@@ -39,6 +52,7 @@ import com.example.android.common.logger.MessageOnlyLogFilter;
 public class MainActivity extends SampleActivityBase {
 
     public static final String TAG = "MainActivity";
+    public static final String USERS_TABLE = "users";
 
     // Whether the Log Fragment is currently shown
     private boolean mLogShown;
@@ -55,14 +69,53 @@ public class MainActivity extends SampleActivityBase {
             transaction.commit();
         }
 
-/*        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        FirebaseAuth mAuth = FirebaseAuth.getInstance();
+        FirebaseUser user = mAuth.getCurrentUser();
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference(USERS_TABLE).child(user.getUid()).getRef();
+
+        // Attach a listener to read the data only once beacuse the account number is supposed to never change
+        ref.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot snapshot) {
+                User post = snapshot.getValue(User.class);
+                post.key = snapshot.getKey();
+
+
+                TextView account = findViewById(R.id.card_account_field);
+                account.setText(post.key);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+        // recuperer le ticket actif
+        ref.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot snapshot) {
+                User post = snapshot.getValue(User.class);
+                post.key = snapshot.getKey();
+
+                TextView account = findViewById(R.id.active_ticket);
+                account.setText("Ticket acheté : " + post.activeTicket);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+        FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                Intent intent = new Intent(MainActivity.this, TicketsView.class);
+                startActivity(intent);
             }
-        });*/
+        });
     }
 
     @Override

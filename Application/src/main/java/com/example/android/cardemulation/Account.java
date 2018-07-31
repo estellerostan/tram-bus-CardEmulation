@@ -1,10 +1,13 @@
 package com.example.android.cardemulation;
 
+import com.google.firebase.database.Exclude;
+
 public class Account {
-    public String number;
+    @Exclude
+    public String key;
 
     public Account(String number) {
-        this.number = number;
+        this.key = key;
     }
 
     public Account() {

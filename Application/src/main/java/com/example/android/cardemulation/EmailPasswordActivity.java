@@ -242,24 +242,6 @@ public class EmailPasswordActivity extends BaseActivity implements
             button.setOnClickListener(new View.OnClickListener() {
 
                 public void onClick(View v) {
-                    //get reference
-                    FirebaseUser user = mAuth.getCurrentUser();
-                    DatabaseReference ref = FirebaseDatabase.getInstance().getReference(USERS_TABLE).child(user.getUid());
-
-                    // Attach a listener to read the data only once beacuse the account number is supposed to never change
-                    ref.addListenerForSingleValueEvent(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(DataSnapshot snapshot) {
-                            TextView myCard = findViewById(R.id.my_card);
-                            myCard.setText(snapshot.getValue(Account.class).number);
-                        }
-
-                        @Override
-                        public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                        }
-                    });
-
                     Intent intent = new Intent(EmailPasswordActivity.this, MainActivity.class);
                     startActivity(intent);
                     finish();
